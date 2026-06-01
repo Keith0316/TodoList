@@ -1,0 +1,255 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Core palette - Indigo/Violet brand */
+    --background: 220 20% 97%;
+    --foreground: 224 30% 12%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 224 30% 12%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 30% 12%;
+
+    /* Primary: rich indigo */
+    --primary: 243 75% 59%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 262 83% 68%;
+
+    /* Secondary: soft violet tint */
+    --secondary: 243 30% 94%;
+    --secondary-foreground: 243 50% 35%;
+
+    --destructive: 0 72% 56%;
+    --destructive-foreground: 0 0% 100%;
+
+    --muted: 220 15% 94%;
+    --muted-foreground: 220 10% 52%;
+
+    --accent: 262 60% 95%;
+    --accent-foreground: 262 60% 35%;
+
+    --border: 220 15% 89%;
+    --input: 220 15% 89%;
+    --ring: 243 75% 59%;
+
+    --radius: 0.75rem;
+
+    /* Surface system */
+    --surface: 0 0% 100%;
+    --surface-hover: 220 20% 96%;
+    --surface-active: 220 20% 93%;
+
+    /* Priority colors */
+    --priority-high: 0 72% 56%;
+    --priority-medium: 35 91% 53%;
+    --priority-low: 152 60% 45%;
+
+    /* Status colors */
+    --status-overdue: 0 72% 56%;
+    --status-upcoming: 35 91% 53%;
+    --status-done: 152 60% 45%;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(243, 75%, 59%), hsl(262, 83%, 68%));
+    --gradient-surface: linear-gradient(180deg, hsl(0, 0%, 100%), hsl(220, 20%, 98%));
+    --gradient-header: linear-gradient(135deg, hsl(243, 75%, 59%) 0%, hsl(262, 83%, 68%) 50%, hsl(280, 70%, 65%) 100%);
+
+    /* Shadows */
+    --shadow-card: 0 1px 3px 0 hsl(224 30% 12% / 0.06), 0 4px 12px 0 hsl(224 30% 12% / 0.04);
+    --shadow-elevated: 0 4px 16px 0 hsl(243 75% 59% / 0.12), 0 1px 4px 0 hsl(224 30% 12% / 0.08);
+    --shadow-glow: 0 0 24px hsl(243 75% 59% / 0.25), 0 4px 16px hsl(243 75% 59% / 0.15);
+  }
+
+  * {
+    @apply border-border;
+    box-sizing: border-box;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(220 15% 85%);
+    border-radius: 99px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(220 15% 72%);
+  }
+
+  /* Date/time input styling */
+  input[type="datetime-local"],
+  input[type="date"],
+  input[type="time"] {
+    color-scheme: light;
+  }
+}
+
+@layer components {
+  /* Gradient button */
+  .btn-gradient {
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px hsl(243 75% 59% / 0.35);
+  }
+  .btn-gradient:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px hsl(243 75% 59% / 0.45);
+  }
+  .btn-gradient:active {
+    transform: translateY(0);
+  }
+
+  /* Glass card */
+  .card-glass {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+  }
+
+  /* Task item hover */
+  .task-item {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .task-item:hover {
+    transform: translateX(2px);
+    box-shadow: var(--shadow-elevated);
+  }
+
+  /* Priority badge */
+  .badge-high {
+    background: hsl(0 72% 56% / 0.1);
+    color: hsl(0 72% 56%);
+    border: 1px solid hsl(0 72% 56% / 0.2);
+  }
+  .badge-medium {
+    background: hsl(35 91% 53% / 0.1);
+    color: hsl(35 80% 42%);
+    border: 1px solid hsl(35 91% 53% / 0.2);
+  }
+  .badge-low {
+    background: hsl(152 60% 45% / 0.1);
+    color: hsl(152 60% 35%);
+    border: 1px solid hsl(152 60% 45% / 0.2);
+  }
+
+  /* Overdue task */
+  .task-overdue {
+    border-left: 3px solid hsl(var(--status-overdue));
+  }
+
+  /* Completed task */
+  .task-completed {
+    opacity: 0.65;
+  }
+
+  /* Calendar day */
+  .cal-day {
+    transition: all 0.15s ease;
+  }
+  .cal-day:hover {
+    background: hsl(var(--secondary));
+  }
+  .cal-day-has-task::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: hsl(var(--primary));
+  }
+
+  /* Notification pulse */
+  .notification-dot {
+    position: relative;
+  }
+  .notification-dot::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 8px;
+    height: 8px;
+    background: hsl(var(--destructive));
+    border-radius: 50%;
+    border: 2px solid white;
+  }
+
+  /* Input focus ring */
+  .input-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/60;
+    transition: all 0.2s ease;
+  }
+
+  /* Checkbox custom */
+  .checkbox-custom {
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    border: 2px solid hsl(var(--border));
+    transition: all 0.2s ease;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .checkbox-custom.checked {
+    background: var(--gradient-primary);
+    border-color: transparent;
+    box-shadow: 0 2px 8px hsl(243 75% 59% / 0.35);
+  }
+  .checkbox-custom:hover:not(.checked) {
+    border-color: hsl(var(--primary));
+    background: hsl(var(--secondary));
+  }
+
+  /* Tab active */
+  .tab-active {
+    background: white;
+    color: hsl(var(--primary));
+    box-shadow: var(--shadow-card);
+  }
+}
+
+@layer utilities {
+  .gradient-text {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .header-gradient {
+    background: var(--gradient-header);
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
