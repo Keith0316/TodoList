@@ -10,6 +10,12 @@ interface ReminderModalProps {
   onDismiss: (id: string) => void
 }
 
+const SNOOZE_OPTIONS: { label: string; minutes: number }[] = [
+  { label: '15 分钟后', minutes: 15 },
+  { label: '1 小时后',  minutes: 60 },
+  { label: '明天',      minutes: 60 * 24 },
+]
+
 export function ReminderModal({ task, onComplete, onSnooze, onDismiss }: ReminderModalProps) {
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
@@ -19,11 +25,13 @@ export function ReminderModal({ task, onComplete, onSnooze, onDismiss }: Reminde
       {/* Modal */}
       <div className="relative w-full max-w-sm animate-bounce-in">
         <div className="rounded-3xl border-2 border-primary/20 bg-card shadow-glow overflow-hidden">
-          {/* Alert Header */}
+
+          {/* Header */}
           <div className="header-gradient px-6 pt-6 pb-4 relative">
             <button
               onClick={() => onDismiss(task.id)}
               className="absolute top-4 right-4 p-1.5 rounded-xl bg-white/20 hover:bg-white/30 transition-colors"
+              aria-label="关闭提醒"
             >
               <X className="w-4 h-4 text-white" />
             </button>
@@ -33,7 +41,6 @@ export function ReminderModal({ task, onComplete, onSnooze, onDismiss }: Reminde
                 <div className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center">
                   <Bell className="w-6 h-6 text-white" />
                 </div>
-                {/* Pulse ring */}
                 <span className="absolute inset-0 rounded-2xl border-2 border-white/50 animate-pulse-ring" />
               </div>
               <div>
@@ -43,7 +50,7 @@ export function ReminderModal({ task, onComplete, onSnooze, onDismiss }: Reminde
             </div>
           </div>
 
-          {/* Task Info */}
+          {/* Task info */}
           <div className="px-6 py-4 border-b">
             <p className="text-base font-semibold text-foreground leading-snug">
               {task.title}
@@ -63,31 +70,25 @@ export function ReminderModal({ task, onComplete, onSnooze, onDismiss }: Reminde
 
           {/* Actions */}
           <div className="px-6 py-4 space-y-2">
-            <Button
-              className="w-full gap-2"
-              onClick={() => onComplete(task.id)}
-            >
+            <Button className="w-full gap-2" onClick={() => onComplete(task.id)}>
               <CheckCircle2 className="w-4 h-4" />
               标记为已完成
             </Button>
 
-            <div className="grid grid-cols-2 gap-2">
-              <Button
-                variant="outline"
-                className="text-sm gap-1.5"
-                onClick={() => onSnooze(task.id, 10)}
-              >
-                <Clock className="w-3.5 h-3.5" />
-                10分钟后提醒
-              </Button>
-              <Button
-                variant="outline"
-                className="text-sm gap-1.5"
-                onClick={() => onSnooze(task.id, 60)}
-              >
-                <Clock className="w-3.5 h-3.5" />
-                1小时后提醒
-              </Button>
+            <p className="text-xs text-muted-foreground text-center pt-1">稍后提醒</p>
+
+            <div className="grid grid-cols-3 gap-2">
+              {SNOOZE_OPTIONS.map(opt => (
+                <Button
+                  key={opt.minutes}
+                  variant="outline"
+                  className="text-xs gap-1 px-2"
+                  onClick={() => onSnooze(task.id, opt.minutes)}
+                >
+                  <Clock className="w-3 h-3 shrink-0" />
+                  {opt.label}
+                </Button>
+              ))}
             </div>
           </div>
         </div>
